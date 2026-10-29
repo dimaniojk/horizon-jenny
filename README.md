@@ -1,4 +1,4 @@
-# Sexmod native Horizon client
+ # Horizon Jenny native Horizon client
 
 18+. This repository is a native Horizon client mod. 
 

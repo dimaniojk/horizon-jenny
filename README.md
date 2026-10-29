@@ -1,6 +1,6 @@
 # Sexmod native Horizon client
 
-18+. This repository is a native Horizon client mod. Sex Mod models, textures, and animations are not included.
+18+. This repository is a native Horizon client mod. 
 
 This directory builds a **custom Horizon executable**. It is not an `.hmod` package and it does not install into the stock Horizon launcher.
 

@@ -1,0 +1,18 @@
+[package]
+name = "sexmod-native"
+version = "1.0.0"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT"
+description = "Native Horizon client mod that draws Sex Mod characters in the world"
+
+[lib]
+path = "mixins/sexmod/runtime.rs"
+
+[dependencies]
+png = "0.18"
+serde_json = "1"
+
+[workspace]
+members = ["tools/audit"]
+resolver = "2"

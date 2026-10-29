@@ -1,0 +1,164 @@
+[mod]
+id = "sexmod"
+version = "1.0.0"
+priority = 100
+
+[compatibility]
+horizon_revision = "028f60881678a9a0e3e198f693a82858fa475c76"
+
+[[module]]
+id = "runtime"
+file = "crates/horizon-client/src/game.rs"
+name = "sexmod"
+source = "runtime.rs"
+
+[[injection]]
+id = "before-command"
+kind = "HEAD"
+cancellable = true
+target = "horizon_client::game::commands::Game<'_>::run_command"
+helper = "command.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "command", ty = "&str", value = "command" },
+]
+
+[[injection]]
+id = "place-player"
+kind = "HEAD"
+target = "horizon_client::game::remote::Game<'_>::remote_send_state"
+helper = "place.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+]
+
+[[injection]]
+id = "lock-movement"
+kind = "HEAD"
+target = "horizon_client::game::remote::Game<'_>::tick_remote"
+helper = "lock.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+]
+
+[[injection]]
+id = "on-tick"
+kind = "HEAD"
+target = "horizon_client::game::Game<'_>::sync_player_body"
+helper = "tick.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+]
+
+[[injection]]
+id = "hide-real-body"
+kind = "HEAD"
+cancellable = true
+target = "horizon_client::game::perspective::Game<'_>::player_model_geometry"
+helper = "hide_body.rs"
+bindings = [
+  { name = "game", ty = "&crate::game::Game<'_>", value = "self" },
+]
+
+[[injection]]
+id = "entity-geometry"
+kind = "HEAD"
+target = "horizon_client::game::end::Game<'_>::end_geometry"
+helper = "geometry.rs"
+bindings = [
+  { name = "game", ty = "&crate::game::Game<'_>", value = "self" },
+  { name = "camera", ty = "glam::DVec3", value = "camera" },
+  { name = "out", ty = "&mut Vec<horizon_client::mesher::Vertex>", value = "out" },
+]
+
+[[injection]]
+id = "entity-target"
+kind = "HEAD"
+cancellable = true
+target = "horizon_client::game::hand::Game<'_>::entity_targeted"
+helper = "target.rs"
+bindings = [
+  { name = "game", ty = "&crate::game::Game<'_>", value = "self" },
+]
+
+[[injection]]
+id = "entity-use"
+kind = "HEAD"
+cancellable = true
+target = "horizon_client::game::Game<'_>::interact_entity"
+helper = "interact.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+]
+
+[[injection]]
+id = "remote-use"
+kind = "HEAD"
+cancellable = true
+target = "horizon_client::game::remote::Game<'_>::remote_use_entity"
+helper = "remote_use.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "hand", ty = "horizon_client::first_person::Hand", value = "hand" },
+]
+
+[[injection]]
+id = "remote-attack"
+kind = "HEAD"
+cancellable = true
+target = "horizon_client::game::remote::Game<'_>::remote_start_attack"
+helper = "remote_attack.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+]
+
+[[injection]]
+id = "entity-attack"
+kind = "HEAD"
+cancellable = true
+target = "horizon_client::game::Game<'_>::attack"
+helper = "attack.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+]
+
+[[injection]]
+id = "menu-draw"
+kind = "RETURN"
+target = "horizon_client::game::Game<'_>::hud"
+helper = "menu_draw.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "batch", ty = "HudBatch", value = "$value" },
+]
+
+[[injection]]
+id = "menu-click"
+kind = "HEAD"
+target = "horizon_client::game::Game<'_>::reset_inventory_clicks"
+helper = "menu_click.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+]
+
+[[injection]]
+id = "menu-key"
+kind = "HEAD"
+cancellable = true
+target = "horizon_client::game::Game<'_>::mapped_key"
+helper = "menu_key.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "key", ty = "winit::keyboard::KeyCode", value = "key" },
+  { name = "pressed", ty = "bool", value = "pressed" },
+  { name = "repeat", ty = "bool", value = "repeat" },
+]
+
+[[injection]]
+id = "atlas-extend"
+kind = "HEAD"
+target = "horizon_client::game::UiResources::load"
+helper = "atlas.rs"
+bindings = [
+  { name = "root", ty = "&std::path::Path", value = "root" },
+]
